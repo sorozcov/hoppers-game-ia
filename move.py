@@ -19,7 +19,8 @@ class NodeMove:
         self.currentCol = space.col
         
     
-    def path(self,path=[]):
+    def path(self,path=None):
+        path= path if path!=None else []
         if(self.parent==None):
             path.append((self.currentRow,self.currentCol))
             path.reverse()
@@ -43,6 +44,12 @@ class NodeMove:
             rowMove,colMove = move
             if(rowMove==space.row and colMove==space.col):
                 return True
+
+    def checkRootSpace(self):
+        if(self.parent==None):
+            return self
+        else:
+            return self.parent.checkRootSpace()
 
     def addChildNodeMove(self,space):
         nodeMove = NodeMove(space,self)

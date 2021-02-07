@@ -8,8 +8,8 @@ from pandas import *
 from game_options import SQUARE_SIZE,NUMBER_OF_ROWS_AND_COLS,BOARD_BACKGROUND_COLOR,BOARD_BORDER_COLOR,PLAYER_1_COLOR,PLAYER_2_COLOR,PLAYER_1_HOUSE_COLOR,PLAYER_2_HOUSE_COLOR,POSSIBLE_MOVE_COLOR
 from piece import Piece,BlankSpace
 class Board:
-    def __init__(self,display):
-        self.display = display
+    def __init__(self,display=None):
+        
         self.backgroundColor = BOARD_BACKGROUND_COLOR
         self.borderColor = BOARD_BORDER_COLOR
         self.player1Color = PLAYER_1_COLOR
@@ -19,7 +19,7 @@ class Board:
         self.board = []
         self.selectedPiecce = None
         self.initBoard()
-        self.draw_board()
+        self.drawBoard(display)
         
     
     def initBoard(self):
@@ -53,51 +53,45 @@ class Board:
             for col in range(colWhite,10):
                 piece=Piece(row,col,self.player2Color,pieceNumber)
                 self.board[row][col] = piece
-                self.piecesPlayer1.append(piece)
+                self.piecesPlayer2.append(piece)
                 pieceNumber = pieceNumber + 1
             colWhite= colWhite -1;
 
-    def draw_board(self):
-        print (DataFrame(self.board))
-        self.display.fill(self.backgroundColor)
-        colPlayer1 = 5
-        for row in range(5):
-            for col in range(colPlayer1):
-                pygame.draw.rect( self.display,self.player1HouseColor, (col*SQUARE_SIZE, row *SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-            colPlayer1= colPlayer1 -1;
-        colWhite = 9
-        for row in range(5,10):
-            for col in range(colWhite,10):
-                pygame.draw.rect( self.display,self.player2HouseColor, (col*SQUARE_SIZE, row *SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-            colWhite= colWhite -1;
-        for row in range(NUMBER_OF_ROWS_AND_COLS):
-            for col in range(NUMBER_OF_ROWS_AND_COLS):
-                if self.board[row][col]!=0:
-                    piece = self.board[row][col]
-                    piece.draw(self.display)
-                    
-                pygame.draw.rect( self.display,self.borderColor, (col*SQUARE_SIZE, row *SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE),1)
+    def drawBoard(self,display=None):
+        if display!=None:
+            display.fill(self.backgroundColor)
+            colPlayer1 = 5
+            for row in range(5):
+                for col in range(colPlayer1):
+                    pygame.draw.rect( display,self.player1HouseColor, (col*SQUARE_SIZE, row *SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                colPlayer1= colPlayer1 -1;
+            colWhite = 9
+            for row in range(5,10):
+                for col in range(colWhite,10):
+                    pygame.draw.rect( display,self.player2HouseColor, (col*SQUARE_SIZE, row *SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                colWhite= colWhite -1;
+            for row in range(NUMBER_OF_ROWS_AND_COLS):
+                for col in range(NUMBER_OF_ROWS_AND_COLS):
+                    if self.board[row][col]!=0:
+                        piece = self.board[row][col]
+                        piece.draw(display)
+                        
+                    pygame.draw.rect( display,self.borderColor, (col*SQUARE_SIZE, row *SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE),1)
 
-    def move(self,fromRow,fromCol,row,col):
+    def move(self,fromRow,fromCol,row,col,display=None):
         piece =self.board[fromRow][fromCol]
         if(piece!=0):
             piece.move(row,col)
             self.board[fromRow][fromCol] = Piece(row=fromRow,col=fromCol,blanckSpace=True)
-            piece.row = row
-            piece.col = col
+            
+            if(piece.color ==PLAYER_1_COLOR):
+                self.piecesPlayer1[piece.pieceNumber] = piece
+            else:
+                self.piecesPlayer2[piece.pieceNumber] = piece
             self.board[row][col]= piece
             
-            
-            self.draw_board()
-    
-    def hypotheticMove(self,fromRow,fromCol,row,col):
-        hypotheticBoard = self.board
-        piece =hypotheticBoard[fromRow][fromCol]
-        if(piece!=0):
-            piece.move(row,col)
-            hypotheticBoard[fromRow][fromCol] = Piece(row=fromRow,col=fromCol,blanckSpace=True)
-            hypotheticBoard[row][col]= piece
-        return hypotheticBoard
+            if(display!=None):
+                self.drawBoard(display)
          
 
     def getPiece(self,row,col):
@@ -131,13 +125,23 @@ class Board:
     def getPieceBottomLeftSpace(self,row,col):
         return self.getPiece(row+1,col-1)
 
-    def drawPossibleMoves(self,piece):
+    def drawPossibleMoves(self,piece,display):
         posibleDestinations = []
         possibleMoves = piece.checkPossibleMoves(self)
         for move in possibleMoves:
             if(move!=None):
                 if(self.getPiece(move.currentRow,move.currentCol)==0):
                     posibleDestinations.append((move.currentRow,move.currentCol))
-                    pygame.draw.circle(self.display,POSSIBLE_MOVE_COLOR , (int(move.currentCol*SQUARE_SIZE+SQUARE_SIZE/2), int(move.currentRow *SQUARE_SIZE+SQUARE_SIZE/2) ), int(SQUARE_SIZE/3))
+                    if(display!=None):
+                        pygame.draw.circle(display,POSSIBLE_MOVE_COLOR , (int(move.currentCol*SQUARE_SIZE+SQUARE_SIZE/2), int(move.currentRow *SQUARE_SIZE+SQUARE_SIZE/2) ), int(SQUARE_SIZE/3))
         return posibleDestinations,possibleMoves
+
+    def possibleMoves(self,piece):
+        posibleDestinations = []
+        possibleMoves = piece.checkPossibleMoves(self)
+        for move in possibleMoves:
+            if(move!=None):
+                if(self.getPiece(move.currentRow,move.currentCol)==0):
+                    posibleDestinations.append((move.currentRow,move.currentCol))
+        return possibleMoves
     

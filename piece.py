@@ -22,7 +22,6 @@ class Piece:
 
 
     def draw(self,display):
-        self.display = display
         pygame.draw.circle(display, self.color, (int(self.col*SQUARE_SIZE+SQUARE_SIZE/2), int(self.row *SQUARE_SIZE+SQUARE_SIZE/2) ), int(SQUARE_SIZE/3))
     
     def checkRightSpace(self,board,move):
@@ -89,14 +88,14 @@ class Piece:
             return [leafNode]
         return []
 
-    def checkRightSpaceJump(self,board,parent=None):
+    def checkRightSpaceJump(self,board,move=None):
         possibleJumpMoves = []
-        move = NodeMove(self,parent)
+        
         newSpaceBeside = board.getPieceRightSpace(self.row,self.col)
         newSpaceJump=None
         if(newSpaceBeside!=None and newSpaceBeside!=0):
             newSpaceJump = board.getPieceRightSpace(newSpaceBeside.row,newSpaceBeside.col)
-        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0 and newSpaceBeside!=0):
+        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0):
             leafNode = move.addChildNodeMove(newSpaceJump)
             newLeafJumps = []
             if(leafNode!=None):
@@ -107,14 +106,14 @@ class Piece:
             return possibleJumpMoves
         return []
 
-    def checkLeftSpaceJump(self,board,parent=None):
+    def checkLeftSpaceJump(self,board,move=None):
         possibleJumpMoves = []
-        move = NodeMove(self,parent)
+        
         newSpaceBeside = board.getPieceLeftSpace(self.row,self.col)
         newSpaceJump=None
         if(newSpaceBeside!=None and newSpaceBeside!=0):
             newSpaceJump = board.getPieceLeftSpace(newSpaceBeside.row,newSpaceBeside.col)
-        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0 and newSpaceBeside!=0):
+        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0):
             leafNode = move.addChildNodeMove(newSpaceJump)
             newLeafJumps = []
             if(leafNode!=None):
@@ -125,14 +124,14 @@ class Piece:
             return possibleJumpMoves
         return []
 
-    def checkTopSpaceJump(self,board,parent=None):
+    def checkTopSpaceJump(self,board,move=None):
         possibleJumpMoves = []
-        move = NodeMove(self,parent)
+        
         newSpaceBeside = board.getPieceTopSpace(self.row,self.col)
         newSpaceJump=None
         if(newSpaceBeside!=None and newSpaceBeside!=0):
             newSpaceJump = board.getPieceTopSpace(newSpaceBeside.row,newSpaceBeside.col)
-        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0 and newSpaceBeside!=0):
+        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0):
             leafNode = move.addChildNodeMove(newSpaceJump)
             newLeafJumps = []
             if(leafNode!=None):
@@ -143,14 +142,14 @@ class Piece:
             return possibleJumpMoves
         return []
 
-    def checkBottomSpaceJump(self,board,parent=None):
+    def checkBottomSpaceJump(self,board,move=None):
         possibleJumpMoves = []
-        move = NodeMove(self,parent)
+        
         newSpaceBeside = board.getPieceBottomSpace(self.row,self.col)
         newSpaceJump=None
         if(newSpaceBeside!=None and newSpaceBeside!=0):
             newSpaceJump = board.getPieceBottomSpace(newSpaceBeside.row,newSpaceBeside.col)
-        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0 and newSpaceBeside!=0):
+        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0):
             leafNode = move.addChildNodeMove(newSpaceJump)
             newLeafJumps = []
             if(leafNode!=None):
@@ -161,14 +160,14 @@ class Piece:
             return possibleJumpMoves
         return []
 
-    def checkTopRightSpaceJump(self,board,parent=None):
+    def checkTopRightSpaceJump(self,board,move=None):
         possibleJumpMoves = []
-        move = NodeMove(self,parent)
+        
         newSpaceBeside = board.getPieceTopRightSpace(self.row,self.col)
         newSpaceJump=None
         if(newSpaceBeside!=None and newSpaceBeside!=0):
             newSpaceJump = board.getPieceTopRightSpace(newSpaceBeside.row,newSpaceBeside.col)
-        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0 and newSpaceBeside!=0):
+        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0):
             leafNode = move.addChildNodeMove(newSpaceJump)
             newLeafJumps = []
             if(leafNode!=None):
@@ -179,14 +178,14 @@ class Piece:
             return possibleJumpMoves
         return []
 
-    def checkTopLeftSpaceJump(self,board,parent=None):
+    def checkTopLeftSpaceJump(self,board,move=None):
         possibleJumpMoves = []
-        move = NodeMove(self,parent)
+        
         newSpaceBeside = board.getPieceTopLeftSpace(self.row,self.col)
         newSpaceJump=None
         if(newSpaceBeside!=None and newSpaceBeside!=0):
             newSpaceJump = board.getPieceTopLeftSpace(newSpaceBeside.row,newSpaceBeside.col)
-        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0 and newSpaceBeside!=0):
+        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0):
             leafNode = move.addChildNodeMove(newSpaceJump)
             newLeafJumps = []
             if(leafNode!=None):
@@ -197,14 +196,14 @@ class Piece:
             return possibleJumpMoves
         return []
     
-    def checkBottomRightSpaceJump(self,board,parent=None):
+    def checkBottomRightSpaceJump(self,board,move=None):
         possibleJumpMoves = []
-        move = NodeMove(self,parent)
+        
         newSpaceBeside = board.getPieceBottomRightSpace(self.row,self.col)
         newSpaceJump=None
         if(newSpaceBeside!=None and newSpaceBeside!=0):
             newSpaceJump = board.getPieceBottomRightSpace(newSpaceBeside.row,newSpaceBeside.col)
-        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0 and newSpaceBeside!=0):
+        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0):
             leafNode = move.addChildNodeMove(newSpaceJump)
             newLeafJumps = []
             if(leafNode!=None):
@@ -215,14 +214,14 @@ class Piece:
             return possibleJumpMoves
         return []
 
-    def checkBottomLeftSpaceJump(self,board,parent=None):
+    def checkBottomLeftSpaceJump(self,board,move=None):
         possibleJumpMoves = []
-        move = NodeMove(self,parent)
+        
         newSpaceBeside = board.getPieceBottomLeftSpace(self.row,self.col)
         newSpaceJump=None
         if(newSpaceBeside!=None and newSpaceBeside!=0):
             newSpaceJump = board.getPieceBottomLeftSpace(newSpaceBeside.row,newSpaceBeside.col)
-        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0 and newSpaceBeside!=0):
+        if(newSpaceJump!=None and newSpaceJump==0 and newSpaceBeside!=0):
             leafNode = move.addChildNodeMove(newSpaceJump)
             newLeafJumps = []
             if(leafNode!=None):
@@ -233,18 +232,18 @@ class Piece:
             return possibleJumpMoves
         return []
 
-    def checkNewJumpMoves(self,board,parent=None):        
-        return (self.checkRightSpaceJump(board,parent)+
-                self.checkLeftSpaceJump(board,parent)+
-                self.checkTopSpaceJump(board,parent)+
-                self.checkBottomSpaceJump(board,parent)+
-                self.checkTopRightSpaceJump(board,parent)+
-                self.checkTopLeftSpaceJump(board,parent)+
-                self.checkBottomRightSpaceJump(board,parent)+
-                self.checkBottomLeftSpaceJump(board,parent))
+    def checkNewJumpMoves(self,board,move=None):        
+        return (self.checkRightSpaceJump(board,move)+
+                self.checkLeftSpaceJump(board,move)+
+                self.checkTopSpaceJump(board,move)+
+                self.checkBottomSpaceJump(board,move)+
+                self.checkTopRightSpaceJump(board,move)+
+                self.checkTopLeftSpaceJump(board,move)+
+                self.checkBottomRightSpaceJump(board,move)+
+                self.checkBottomLeftSpaceJump(board,move))
     
-    def checkNewOneSpaceMoves(self,board):    
-        move = NodeMove(self)    
+    def checkNewOneSpaceMoves(self,board,move=None):    
+        # move = NodeMove(self)    
         return (self.checkRightSpace(board,move)+
                 self.checkLeftSpace(board,move)+
                 self.checkTopSpace(board,move)+
@@ -255,14 +254,18 @@ class Piece:
                 self.checkBottomLeftSpace(board,move))
     
     def checkPossibleMoves(self,board):
-        self.drawSelected()
-        return (self.checkNewJumpMoves(board)+self.checkNewOneSpaceMoves(board))
+        
+        return (self.checkNewJumpMoves(board,NodeMove(self))+self.checkNewOneSpaceMoves(board,NodeMove(self)))
 
-    def drawSelected(self):
-        pygame.draw.circle(self.display, BLACK, (int(self.col*SQUARE_SIZE+SQUARE_SIZE/2), int(self.row *SQUARE_SIZE+SQUARE_SIZE/2) ), int(SQUARE_SIZE/3))
+    def possibleMoves(self,board):
+        return (self.checkNewJumpMoves(board,NodeMove(self))+self.checkNewOneSpaceMoves(board,NodeMove(self)))
+    
+    def drawSelected(self,display=None):
+        if(display!=None):
+            pygame.draw.circle(display, BLACK, (int(self.col*SQUARE_SIZE+SQUARE_SIZE/2), int(self.row *SQUARE_SIZE+SQUARE_SIZE/2) ), int(SQUARE_SIZE/3))
 
     def __repr__(self):
-        return   ('P1' if self.color==PLAYER_1_COLOR else 'P2') if not self.blanckSpace else '0'
+        return   ('P1' +(f'({self.row} {self.col})') if self.color==PLAYER_1_COLOR else 'P2' +(f'({self.row} {self.col})')) if not self.blanckSpace else '0'
 
     def __eq__(self,other):
         if(self.blanckSpace):
