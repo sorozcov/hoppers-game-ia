@@ -15,6 +15,7 @@ class Space:
 class NodeMove:
     def __init__(self,space,parent=None):
         self.parent=parent
+        self.fullPath=[]
         self.currentRow = space.row
         self.currentCol = space.col
         
@@ -38,12 +39,13 @@ class NodeMove:
         else:
             return self.parent.checkInTree(space)
 
-    def checkInTree2(self,space):
+    def checkInTree2(self,space,path=None):
         path = self.parent.path()
         for move in path:
             rowMove,colMove = move
             if(rowMove==space.row and colMove==space.col):
                 return True
+        return path
 
     def checkRootSpace(self):
         if(self.parent==None):
@@ -53,8 +55,11 @@ class NodeMove:
 
     def addChildNodeMove(self,space):
         nodeMove = NodeMove(space,self)
-        if(nodeMove.checkInTree(space)):
+        path = nodeMove.checkInTree2(space)
+        if(path==True):
             return None
+        path.append((nodeMove.currentRow,nodeMove.currentCol))
+        nodeMove.fullPath = path
         return nodeMove
         
     

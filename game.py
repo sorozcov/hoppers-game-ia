@@ -7,8 +7,10 @@
 from board import Board
 from game_options import PLAYER_1_COLOR,PLAYER_2_COLOR
 import copy
+import pygame
 import pandas
 import itertools
+import time
 
 class Game:
     def __init__(self,display=None):
@@ -30,27 +32,44 @@ class Game:
 
     #Move from action
     def moveAction(self,action,printPath=False,display=None):
-        initSpace= action.checkRootSpace()
+        initSpace= action.fullPath[0]
         endSpace = action
-        self.board.move(initSpace.currentRow,initSpace.currentCol,endSpace.currentRow,endSpace.currentCol,display)
+        self.board.move(initSpace[0],initSpace[1],endSpace.currentRow,endSpace.currentCol,display)
         self.selectedPiece = 0
+        self.changeTurn()
+        return self.copy()
+    
+    def moveActionStepByStep(self,action,printPath=False,display=None):
+
+        for indexStep in range(len(action.fullPath)-1):
+            initSpace = action.fullPath[indexStep]
+            endSpace = action.fullPath[indexStep+1]
+
+            piece = self.board.board[initSpace[0]][initSpace[1]]
+            piece.drawSelected(display)
+            pygame.display.update()
+            time.sleep(2)
+            self.board.move(initSpace[0],initSpace[1],endSpace[0],endSpace[1],display)
+            pygame.display.update()
+            self.selectedPiece = 0
         self.changeTurn()
         return self.copy()
     
     def moveActionCopy(self,action,printPath=False,display=None):
         gameCopy = self.copy()
-        initSpace= action.checkRootSpace()
+        initSpace= action.fullPath[0]
         endSpace = action
-        gameCopy.move(initSpace.currentRow,initSpace.currentCol,endSpace.currentRow,endSpace.currentCol,display)
+        gameCopy.move(initSpace[0],initSpace[1],endSpace.currentRow,endSpace.currentCol,display)
         gameCopy.selectedPiece = 0
         gameCopy.changeTurn()
         return gameCopy
 
     def checkPossibleMoves(self):
-        if(self.turn==PLAYER_1_COLOR):
-            return list(itertools.chain.from_iterable(map(self.checkPossibleMovesPiece,self.board.piecesPlayer1)))
-        else:
-            return list(itertools.chain.from_iterable(map(self.checkPossibleMovesPiece,self.board.piecesPlayer2)))
+        pieces = self.board.piecesPlayer1 if self.turn==PLAYER_1_COLOR else self.board.piecesPlayer2
+        moves = list(itertools.chain.from_iterable(map(self.checkPossibleMovesPiece,pieces)))
+        # moves.sort(key=lambda move: len(move.fullPath),reverse=True)
+        return moves
+       
 
 
     def checkPossibleMovesPiece(self,piece):

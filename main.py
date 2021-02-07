@@ -32,13 +32,15 @@ aiPlayer1 = MinimaxAgent(game,PLAYER_1_COLOR)
 def main():
     checkWin=False
     gameRunning = True
+    pygame.display.update()
     while gameRunning:
-        if(checkWin==False):
-            if((aiPlayer1==None and aiPlayer2==None) or (aiPlayer1!=None and aiPlayer2==None and aiPlayer1.color!=game.turn) or (aiPlayer2!=None and aiPlayer1==None and aiPlayer2.color!=game.turn)):
-                pygame.display.update()
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        gameRunning = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameRunning = False      
+            if(checkWin==False):
+                if((aiPlayer1==None and aiPlayer2==None) or (aiPlayer1!=None and aiPlayer2==None and aiPlayer1.color!=game.turn) or (aiPlayer2!=None and aiPlayer1==None and aiPlayer2.color!=game.turn)):
+                    pygame.display.update()
+                    
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         pos = pygame.mouse.get_pos()
                         
@@ -49,34 +51,32 @@ def main():
                         if(game.selectedPiece==0 or game.turn!=game.selectedPiece.color or (game.turn==game.selectedPiece.color and (row,col) not in game.possibleDestinations)):
                             game.selectPiece(row,col,display)
                         elif(game.turn==game.selectedPiece.color and (row,col) in game.possibleDestinations):
-                            r=row+1
-                            c=col+1
+
                             turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'
                             move = game.possibleMoves[game.possibleDestinations.index((row,col))]
 
-                            print(f"{turn}({move.path()})")
+                            print(f"{turn}({move.fullPath})")
                             game.move(game.selectedPiece.row,game.selectedPiece.col,int(row),int(col),display)
                             # print(DataFrame(game.board.piecesPlayer1)) if game.turn!=PLAYER_1_COLOR else print(DataFrame(game.board.piecesPlayer2))
                             checkWin = game.checkWin()
-                        pygame.display.update()
-            elif (aiPlayer1!=None and aiPlayer1.color==game.turn):
-                turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'    
-                move=aiPlayer1.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),2)
-                print(f"{turn}({move.path()})")
-                game.moveAction(move,True,display)
-                print(DataFrame(game.board.board))
-                pygame.display.update()
-            elif(aiPlayer2!=None and aiPlayer2.color==game.turn):
-                turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'    
-                move=aiPlayer2.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),2)
-                print(f"{turn}({move.path()})")
-                game.moveAction(move,True,display)
-                print(DataFrame(game.board.board))
-                pygame.display.update()
+                            pygame.display.update()
+                elif (aiPlayer1!=None and aiPlayer1.color==game.turn):
+                    turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'    
+                    move=aiPlayer1.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),2)
+                    print(f"{turn}({move.fullPath})")
+                    game.moveActionStepByStep(move,True,display)
+                    print(DataFrame(game.board.board))
+                    pygame.display.update()
+                elif(aiPlayer2!=None and aiPlayer2.color==game.turn):
+                    turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'    
+                    move=aiPlayer2.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),2)
+                    print(f"{turn}({move.fullPath})")
+                    game.moveActionStepByStep(move,True,display)
+                    print(DataFrame(game.board.board))
+                    pygame.display.update()
                     
-               
+        # pygame.display.update()   
                     
-                # game.select(row, col)
      
         
 

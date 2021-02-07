@@ -11,6 +11,7 @@ game = Game(display)
 aiPlayer1 = MinimaxAgent(game,PLAYER_1_COLOR)
 aiPlayer2 = MinimaxAgent(game,PLAYER_2_COLOR)
 checkWin = False
+
 while(checkWin==False):
     if (aiPlayer1!=None and aiPlayer1.color==game.turn):
         turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'    
