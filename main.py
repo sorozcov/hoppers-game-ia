@@ -14,21 +14,26 @@ from minimaxAgent import MinimaxAgent
 from pandas  import DataFrame
 import copy
 
+#Create Pygame Display
 display=pygame.display.set_mode((BOARD_SIZE,BOARD_SIZE))
 pygame.display.set_caption('HOPPERS')
 
+#Position from mouse
 def getSquareFromMouse(pos):
     x, y = pos
     row = y // SQUARE_SIZE
     col = x // SQUARE_SIZE
     return row, col
+
+#New Hoopers Game   
 game = Game(display)
 aiPlayer1 = None
 aiPlayer2 = None
+#Comment this if you want real players
 aiPlayer1 = MinimaxAgent(game,PLAYER_1_COLOR)
 # aiPlayer2 = MinimaxAgent(game,PLAYER_2_COLOR)
 
-
+# Main for playing ai vs ai
 def main():
     checkWin=False
     gameRunning = True
@@ -66,6 +71,7 @@ def main():
                     print(f"{turn}({move.fullPath})")
                     game.moveActionStepByStep(move,True,display)
                     print(DataFrame(game.board.board))
+                    checkWin = game.checkWin()
                     pygame.display.update()
                 elif(aiPlayer2!=None and aiPlayer2.color==game.turn):
                     turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'    
@@ -73,11 +79,15 @@ def main():
                     print(f"{turn}({move.fullPath})")
                     game.moveActionStepByStep(move,True,display)
                     print(DataFrame(game.board.board))
+                    checkWin = game.checkWin()
                     pygame.display.update()
-                    
+    
         # pygame.display.update()   
                     
-     
+    if(checkWin==PLAYER_1_COLOR):
+        print("PLAYER RED HAS WON")
+    else:
+        print("PLAYER BLUE HAS WON")     
         
 
 main()

@@ -7,6 +7,7 @@ from game_options import SQUARE_SIZE,NUMBER_OF_ROWS_AND_COLS,PLAYER_1_COLOR,BLAC
 from move import NodeMove
 import pygame 
 
+#Class Piece
 class Piece:
     def __init__(self,row,col,color=None,pieceNumber=None,blanckSpace=False):
         self.row = row
@@ -15,15 +16,19 @@ class Piece:
         self.pieceNumber = pieceNumber
         self.inside = False
         self.blanckSpace = blanckSpace
-    
+
+    # Piece to move    
     def move(self,row,col):
         self.row = row
         self.col = col
 
 
+    # Draw a piece
     def draw(self,display):
         pygame.draw.circle(display, self.color, (int(self.col*SQUARE_SIZE+SQUARE_SIZE/2), int(self.row *SQUARE_SIZE+SQUARE_SIZE/2) ), int(SQUARE_SIZE/3))
     
+    # Check possible jumps of a piece given its parent move and the board of the game
+
     def checkRightSpace(self,board,move):
         
         newSpace = board.getPieceRightSpace(self.row,self.col)
@@ -264,6 +269,8 @@ class Piece:
         if(display!=None):
             pygame.draw.circle(display, BLACK, (int(self.col*SQUARE_SIZE+SQUARE_SIZE/2), int(self.row *SQUARE_SIZE+SQUARE_SIZE/2) ), int(SQUARE_SIZE/3))
 
+
+    # Rep and eq for blank spaces
     def __repr__(self):
         return   ('P1' +(f'({self.row} {self.col})') if self.color==PLAYER_1_COLOR else 'P2' +(f'({self.row} {self.col})')) if not self.blanckSpace else '0'
 
@@ -271,6 +278,8 @@ class Piece:
         if(self.blanckSpace):
             return other==0
 
+
+#Class Blank Space used sometimes for blank spaces
 class BlankSpace:
     def __init__(self,row,col):
         self.row = row

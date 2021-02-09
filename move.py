@@ -11,7 +11,7 @@ class Space:
         self.row = row
         self.col = col
 
-    
+#Class Move   
 class NodeMove:
     def __init__(self,space,parent=None):
         self.parent=parent
@@ -19,7 +19,7 @@ class NodeMove:
         self.currentRow = space.row
         self.currentCol = space.col
         
-    
+    #Calculate a path on the go
     def path(self,path=None):
         path= path if path!=None else []
         if(self.parent==None):
@@ -30,16 +30,17 @@ class NodeMove:
             path.append((self.currentRow,self.currentCol))
             return self.parent.path(path)
 
-
-    def checkInTree(self,space):
+    #Check in Tree of moves 2
+    def checkInTree2(self,space):
         if(self.parent==None):
             return False
         elif(self.parent.currentRow==space.row and self.parent.currentCol==space.col):
             return True
         else:
-            return self.parent.checkInTree(space)
+            return self.parent.checkInTree2(space)
 
-    def checkInTree2(self,space,path=None):
+    #Check in tree of moves 
+    def checkInTree(self,space,path=None):
         path = self.parent.path()
         for move in path:
             rowMove,colMove = move
@@ -47,17 +48,20 @@ class NodeMove:
                 return True
         return path
 
+    #Check root space of move
     def checkRootSpace(self):
         if(self.parent==None):
             return self
         else:
             return self.parent.checkRootSpace()
 
+    #Add child node to a possible move
     def addChildNodeMove(self,space):
         nodeMove = NodeMove(space,self)
-        path = nodeMove.checkInTree2(space)
+        path = nodeMove.checkInTree(space)
         if(path==True):
             return None
+        #Add fullPath to new node
         path.append((nodeMove.currentRow,nodeMove.currentCol))
         nodeMove.fullPath = path
         return nodeMove

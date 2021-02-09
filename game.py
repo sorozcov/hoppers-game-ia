@@ -12,6 +12,7 @@ import pandas
 import itertools
 import time
 
+#Class Game Hoppers
 class Game:
     def __init__(self,display=None):
         self.board = Board(display)
@@ -20,17 +21,20 @@ class Game:
         self.possibleMoves = []
         self.possibleDestinations = []
 
-
+    #Deep copy of self
     def copy(self):
         return copy.deepcopy(self)
 
+    #Move given coordinates of board
+    #Display if using pygame display
     def move(self,fromRow,fromCol,row,col,display=None):
         self.board.move(fromRow,fromCol,row,col,display)
         self.selectedPiece = 0
         self.changeTurn()
         return self.copy()
 
-    #Move from action
+    #Move from given move action
+    #Display if using pygame display
     def moveAction(self,action,printPath=False,display=None):
         initSpace= action.fullPath[0]
         endSpace = action
@@ -39,6 +43,7 @@ class Game:
         self.changeTurn()
         return self.copy()
     
+    #Move action step by step on pygame display
     def moveActionStepByStep(self,action,printPath=False,display=None):
 
         for indexStep in range(len(action.fullPath)-1):
@@ -55,6 +60,8 @@ class Game:
         self.changeTurn()
         return self.copy()
     
+    #Move Action and return a copy
+    #This is a hypothetical move in a new board
     def moveActionCopy(self,action,printPath=False,display=None):
         gameCopy = self.copy()
         initSpace= action.fullPath[0]
@@ -64,23 +71,40 @@ class Game:
         gameCopy.changeTurn()
         return gameCopy
 
-    def checkPossibleMoves(self):
+    #Check list of a possible moves
+    def checkPossibleMoves(self,omitPiecesInPositions=[]):
         pieces = self.board.piecesPlayer1 if self.turn==PLAYER_1_COLOR else self.board.piecesPlayer2
-        moves = list(itertools.chain.from_iterable(map(self.checkPossibleMovesPiece,pieces)))
-        # moves.sort(key=lambda move: len(move.fullPath),reverse=True)
+        # moves = list(itertools.chain.from_iterable(map(self.checkPossibleMovesPiece,pieces,omitPiecesInPositions)))
+        moves =[]
+        [moves.extend(self.checkPossibleMovesPiece(piece,omitPiecesInPositions)) for piece in pieces]  
+        # moves.sort(key=lambda move: len(move.fullPath) ,reverse=True)
+        moves.sort(key=lambda move: self.calculateDistance(move,self.turn==PLAYER_1_COLOR) ,reverse=True)
         return moves
-       
+    
+    # Function to sort moves
+    def calculateDistance(self,move,player1=True):
+        init = move.fullPath[0]
+        distance = ((move.currentRow-init[0])**2 + (move.currentCol - init[1])**2)**(1/2)
+        try:
+            m = (move.currentRow-init[0])/(move.currentCol - init[1])
+        except:
+            m=1
+        sign = +1 if m>0 else (-1 if m<0 else 0)
+        if(player1):
+            return sign*distance
+        else:
+            return sign*distance
 
+    #Check possibles moves given a piece of game
+    def checkPossibleMovesPiece(self,piece,omitPiecesInPositions=[]):
+        return  [] if (piece.row,piece.col) in omitPiecesInPositions else piece.possibleMoves(self.board)
 
-    def checkPossibleMovesPiece(self,piece):
-        return piece.possibleMoves(self.board)
-
-
+    # Return the turn of player
     def toMoveTurn(self):
         return self.turn
 
 
-
+    # Select a piece to move it and show its possible moves
     def selectPiece(self,row,col,display=None):
         self.possibleDestinations=[]
         self.possibleMoves=[]
@@ -92,12 +116,14 @@ class Game:
         else:
             self.selectedPiece =0
 
+    #Change players turn
     def changeTurn(self):
         if self.turn==PLAYER_1_COLOR:
             self.turn=PLAYER_2_COLOR
         else:
             self.turn=PLAYER_1_COLOR
 
+    #Check if win on game
     def checkWin(self):
         player1PiecesInPlayer2House = 0
         player2PiecesInPlayer1House = 0
@@ -123,6 +149,7 @@ class Game:
             return PLAYER_2_COLOR
         return False
 
+    #Check if is terminal node and if someone won
     def isTerminal(self):
         player1PiecesInPlayer2House = 0
         player2PiecesInPlayer1House = 0

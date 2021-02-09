@@ -4,9 +4,10 @@
 # Hoppers game with AI
 # board.py class
 import pygame
-from pandas import *
 from game_options import SQUARE_SIZE,NUMBER_OF_ROWS_AND_COLS,BOARD_BACKGROUND_COLOR,BOARD_BORDER_COLOR,PLAYER_1_COLOR,PLAYER_2_COLOR,PLAYER_1_HOUSE_COLOR,PLAYER_2_HOUSE_COLOR,POSSIBLE_MOVE_COLOR
 from piece import Piece,BlankSpace
+
+# Class board
 class Board:
     def __init__(self,display=None):
         
@@ -22,11 +23,13 @@ class Board:
         self.drawBoard(display)
         
     
+    # Init Board
     def initBoard(self):
         self.board = []
         self.clearBoard()
         self.createPieces()
         
+    # Clear board to a new board
     def clearBoard(self):
         # We generate whole board with 0s
         self.board = []
@@ -37,6 +40,7 @@ class Board:
             for col in range(NUMBER_OF_ROWS_AND_COLS):
                 self.board[row].append(Piece(row=row,col=col,blanckSpace=True))
 
+    # Create pieces in board
     def createPieces(self):
         colPlayer1 = 5
         pieceNumber = 0
@@ -57,6 +61,7 @@ class Board:
                 pieceNumber = pieceNumber + 1
             colWhite= colWhite -1;
 
+    #Draw board on display of pygame
     def drawBoard(self,display=None):
         if display!=None:
             display.fill(self.backgroundColor)
@@ -78,6 +83,8 @@ class Board:
                         
                     pygame.draw.rect( display,self.borderColor, (col*SQUARE_SIZE, row *SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE),1)
 
+
+    #Move on board
     def move(self,fromRow,fromCol,row,col,display=None):
         piece =self.board[fromRow][fromCol]
         if(piece!=0):
@@ -93,7 +100,7 @@ class Board:
             if(display!=None):
                 self.drawBoard(display)
          
-
+    #Get piece in position of board
     def getPiece(self,row,col):
         if(row>NUMBER_OF_ROWS_AND_COLS-1 or row<0):
             return None
@@ -101,6 +108,8 @@ class Board:
             return None
         return self.board[row][col]
     
+    # Get spaces near a piece functions
+
     def getPieceTopSpace(self,row,col):
         return self.getPiece(row-1,col)
 
@@ -125,6 +134,7 @@ class Board:
     def getPieceBottomLeftSpace(self,row,col):
         return self.getPiece(row+1,col-1)
 
+    #Draw possible moves on pygame for selected piece
     def drawPossibleMoves(self,piece,display):
         posibleDestinations = []
         possibleMoves = piece.checkPossibleMoves(self)
@@ -136,6 +146,7 @@ class Board:
                         pygame.draw.circle(display,POSSIBLE_MOVE_COLOR , (int(move.currentCol*SQUARE_SIZE+SQUARE_SIZE/2), int(move.currentRow *SQUARE_SIZE+SQUARE_SIZE/2) ), int(SQUARE_SIZE/3))
         return posibleDestinations,possibleMoves
 
+    #Return possible moves for a piece
     def possibleMoves(self,piece):
         posibleDestinations = []
         possibleMoves = piece.checkPossibleMoves(self)
