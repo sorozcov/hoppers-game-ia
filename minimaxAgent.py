@@ -113,11 +113,11 @@ class MinimaxAgent():
                 normRowPlayer2=piecePlayer2.row
                 normColPlayer2=piecePlayer2.col
                 if(normRowPlayer1+normColPlayer1>=14):
-                    pointsPlayer1 = pointsPlayer1 - 25
+                    pointsPlayer1 = pointsPlayer1 - 15
                 if(normRowPlayer1==targetPiecePlayer1[0] and normColPlayer1==targetPiecePlayer1[1]):
-                     pointsPlayer1 = pointsPlayer1 - 100
+                     pointsPlayer1 = pointsPlayer1 - 15
                 if(normRowPlayer2+normColPlayer2<=4):
-                    pointsPlayer2 = pointsPlayer2 - 25
+                    pointsPlayer2 = pointsPlayer2 - 15
                 if(normRowPlayer2==targetPiecePlayer2[0] and normColPlayer2==targetPiecePlayer2[1]):
                      pointsPlayer2 = pointsPlayer2 - 15
                 pointsPiecePlayer1= ((targetPiecePlayer1[0]-normRowPlayer1)**2 + (targetPiecePlayer1[1]-normColPlayer1)**2)*1/2
