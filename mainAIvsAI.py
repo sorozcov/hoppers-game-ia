@@ -23,7 +23,7 @@ while(checkWin==False):
         playsPlayer1 = playsPlayer1 +1
         turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'    
         t1 = time.time()
-        move=aiPlayer1.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),2)
+        move=aiPlayer1.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),1)
         t2 = time.time()
         
         tim = (t2-t1)
@@ -38,7 +38,7 @@ while(checkWin==False):
         playsPlayer2 = playsPlayer2 +1
         turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'    
         t1 = time.time()
-        move=aiPlayer2.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),2)
+        move=aiPlayer2.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),1)
         t2 = time.time()
         tim = (t2-t1)
         

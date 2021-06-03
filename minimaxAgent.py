@@ -92,6 +92,7 @@ class MinimaxAgent():
 
     #Space of different evaluation functions
 
+    
     def evalFunctionDistance(self,game,checkWin):
         #Utility function
         if(checkWin==self.playerMaxColor):
@@ -114,14 +115,15 @@ class MinimaxAgent():
                 normColPlayer2=piecePlayer2.col
                 if(normRowPlayer1+normColPlayer1>=14):
                     pointsPlayer1 = pointsPlayer1 - 15
-                if(normRowPlayer1==targetPiecePlayer1[0] and normColPlayer1==targetPiecePlayer1[1]):
-                     pointsPlayer1 = pointsPlayer1 - 15
+                # if(normRowPlayer1==targetPiecePlayer1[0] and normColPlayer1==targetPiecePlayer1[1]):
+                #      pointsPlayer1 = pointsPlayer1 - 15
                 if(normRowPlayer2+normColPlayer2<=4):
                     pointsPlayer2 = pointsPlayer2 - 15
-                if(normRowPlayer2==targetPiecePlayer2[0] and normColPlayer2==targetPiecePlayer2[1]):
-                     pointsPlayer2 = pointsPlayer2 - 15
+                # if(normRowPlayer2==targetPiecePlayer2[0] and normColPlayer2==targetPiecePlayer2[1]):
+                #      pointsPlayer2 = pointsPlayer2 - 15
                 pointsPiecePlayer1= ((targetPiecePlayer1[0]-normRowPlayer1)**2 + (targetPiecePlayer1[1]-normColPlayer1)**2)*1/2
                 pointsPiecePlayer2= ((targetPiecePlayer2[0]-normRowPlayer2)**2 + (targetPiecePlayer2[1]-normColPlayer2)**2)*1/2
+                
                 
                 pointsPlayer1=pointsPlayer1+pointsPiecePlayer1
                 pointsPlayer2=pointsPlayer2 +pointsPiecePlayer2
@@ -129,6 +131,84 @@ class MinimaxAgent():
                 return -(pointsPlayer1-pointsPlayer2)
             else:
                 return -(pointsPlayer2-pointsPlayer1)
+
+    def evalFunctionDistanceFactor(self,game,checkWin):
+        #Utility function
+        if(checkWin==self.playerMaxColor):
+            return float('inf')
+        elif(checkWin==self.playerMinColor):
+            return float('-inf')
+        else:
+            #Base player points on distance to a target space on board
+            pointsPlayer1=0
+            pointsPlayer2=0
+            targetPiecePlayer1 = self.targetPiecePlayer1
+            targetPiecePlayer2 = self.targetPiecePlayer2
+            for i in range(len(game.board.piecesPlayer1)):
+                piecePlayer1=game.board.piecesPlayer1[i]
+                piecePlayer2=game.board.piecesPlayer2[i]
+                normRowPlayer1=piecePlayer1.row
+                normColPlayer1=piecePlayer1.col
+
+                normRowPlayer2=piecePlayer2.row
+                normColPlayer2=piecePlayer2.col
+                if(normRowPlayer1+normColPlayer1>=14):
+                    pointsPlayer1 = pointsPlayer1 + 15
+                # if(normRowPlayer1==targetPiecePlayer1[0] and normColPlayer1==targetPiecePlayer1[1]):
+                #      pointsPlayer1 = pointsPlayer1 + 15
+                if(normRowPlayer2+normColPlayer2<=4):
+                    pointsPlayer2 = pointsPlayer2 + 15
+                # if(normRowPlayer2==targetPiecePlayer2[0] and normColPlayer2==targetPiecePlayer2[1]):
+                #      pointsPlayer2 = pointsPlayer2 - 15
+                pointsPiecePlayer1= ((targetPiecePlayer1[0]-normRowPlayer1)**2 + (targetPiecePlayer1[1]-normColPlayer1)**2)**(1/2)
+                pointsPiecePlayer2= ((targetPiecePlayer2[0]-normRowPlayer2)**2 + (targetPiecePlayer2[1]-normColPlayer2)**2)**(1/2)
+                
+                
+                pointsPlayer1=(pointsPlayer1/15*15)*2/5+(pointsPiecePlayer1/10*(2**(1/2))*15)*3/5
+                pointsPlayer2=(pointsPlayer2/15*15) *2/5+(pointsPiecePlayer2/10*(2**(1/2))*15)*3/5
+            if(self.playerMaxColor==PLAYER_1_COLOR):
+                return (pointsPlayer1-pointsPlayer2)
+            else:
+                return (pointsPlayer2-pointsPlayer1)
+    # def evalFunctionDistance15(self,game,checkWin):
+    #     #Utility function
+    #     if(checkWin==self.playerMaxColor):
+    #         return float('inf')
+    #     elif(checkWin==self.playerMinColor):
+    #         return float('-inf')
+    #     else:
+    #         #Base player points on distance to a target space on board
+    #         pointsPlayer1=0
+    #         pointsPlayer2=0
+    #         targetPiecePlayer1 = self.targetPiecePlayer1
+    #         targetPiecePlayer2 = self.targetPiecePlayer2
+    #         for i in range(len(game.board.piecesPlayer1)):
+    #             piecePlayer1=game.board.piecesPlayer1[i]
+    #             piecePlayer2=game.board.piecesPlayer2[i]
+    #             normRowPlayer1=piecePlayer1.row
+    #             normColPlayer1=piecePlayer1.col
+
+    #             normRowPlayer2=piecePlayer2.row
+    #             normColPlayer2=piecePlayer2.col
+    #             if(normRowPlayer1+normColPlayer1>=14):
+    #                 pointsPlayer1 = pointsPlayer1 - 30
+    #             # if(normRowPlayer1==targetPiecePlayer1[0] and normColPlayer1==targetPiecePlayer1[1]):
+    #             #      pointsPlayer1 = pointsPlayer1 - 30
+    #             if(normRowPlayer2+normColPlayer2<=4):
+    #                 pointsPlayer2 = pointsPlayer2 - 30
+    #             # if(normRowPlayer2==targetPiecePlayer2[0] and normColPlayer2==targetPiecePlayer2[1]):
+    #             #      pointsPlayer2 = pointsPlayer2 - 15
+    #             factorP1 = 2.5 if pointsPlayer1 < -30*8 else 1
+    #             factorP2 = 2.5 if pointsPlayer2 < -30*8 else 1
+    #             pointsPiecePlayer1= ((targetPiecePlayer1[0]-normRowPlayer1)**2 + (targetPiecePlayer1[1]-normColPlayer1)**2)*1/2 * factorP1
+    #             pointsPiecePlayer2= ((targetPiecePlayer2[0]-normRowPlayer2)**2 + (targetPiecePlayer2[1]-normColPlayer2)**2)*1/2 * factorP2
+                
+    #             pointsPlayer1=pointsPlayer1+pointsPiecePlayer1
+    #             pointsPlayer2=pointsPlayer2 +pointsPiecePlayer2
+    #         if(self.playerMaxColor==PLAYER_1_COLOR):
+    #             return -(pointsPlayer1-pointsPlayer2)
+    #         else:
+    #             return -(pointsPlayer2-pointsPlayer1)
 
     def evalFunction6(self,game,checkWin):
         #Utility function

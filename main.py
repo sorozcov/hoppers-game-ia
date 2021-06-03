@@ -30,8 +30,8 @@ game = Game(display)
 aiPlayer1 = None
 aiPlayer2 = None
 #Comment this if you want real players
-aiPlayer1 = MinimaxAgent(game,PLAYER_1_COLOR)
-# aiPlayer2 = MinimaxAgent(game,PLAYER_2_COLOR)
+# aiPlayer1 = MinimaxAgent(game,PLAYER_1_COLOR)
+aiPlayer2 = MinimaxAgent(game,PLAYER_2_COLOR)
 
 # Main for playing ai vs ai
 def main():
@@ -67,7 +67,7 @@ def main():
                             pygame.display.update()
                 elif (aiPlayer1!=None and aiPlayer1.color==game.turn):
                     turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'    
-                    move=aiPlayer1.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),2)
+                    move=aiPlayer1.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),1)
                     print(f"{turn}({move.fullPath})")
                     game.moveActionStepByStep(move,True,display)
                     print(DataFrame(game.board.board))
@@ -75,7 +75,7 @@ def main():
                     pygame.display.update()
                 elif(aiPlayer2!=None and aiPlayer2.color==game.turn):
                     turn = 'RED' if game.turn==PLAYER_1_COLOR else 'BLUE'    
-                    move=aiPlayer2.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),2)
+                    move=aiPlayer2.alphaBetaSearch(game.copy(),float('-inf'),float('+inf'),1)
                     print(f"{turn}({move.fullPath})")
                     game.moveActionStepByStep(move,True,display)
                     print(DataFrame(game.board.board))
